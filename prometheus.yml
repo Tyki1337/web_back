@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 5s # Как часто собирать метрики
+
+scrape_configs:
+  - job_name: 'nestjs-backend'
+    metrics_path: '/metrics'
+    static_configs:
+      # Имя сервиса 'backend' берется из docker-compose, а 3000 — порт NestJS внутри сети Docker
+      - targets: ['backend:3000']

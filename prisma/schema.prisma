@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas = ["public", "auth"]
+}
+
+// Таблица транзакций
+model Transaction {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ownerId    String   @map("owner_id") @db.Uuid
+  categoryId String   @map("category_id")
+  title      String
+  amount     Decimal  @db.Decimal
+  type       String
+  date       DateTime @db.Date
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Связи
+  user     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  @@map("transactions")
+  @@schema("public")
+}
+
+// Таблица категорий
+model Category {
+  id           String        @id
+  name         String
+  transactions Transaction[]
+
+  @@map("categories")
+  @@schema("public")
+}
+
+// Заглушка для связи с пользователями Supabase Auth
+model User {
+  id           String        @id @db.Uuid
+  transactions Transaction[]
+
+  @@map("users")
+  @@schema("auth")
+}

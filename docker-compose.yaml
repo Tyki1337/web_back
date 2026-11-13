@@ -26,7 +26,6 @@ services:
     container_name: prometheus
     restart: unless-stopped
     volumes:
-      # Монтируем ваш конфиг внутрь контейнера Prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - "9090:9090"
@@ -40,7 +39,7 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin # Пароль для первого входа
+      - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_SERVER_HTTP_PORT=3001
     volumes:
       - grafana-data:/var/lib/grafana

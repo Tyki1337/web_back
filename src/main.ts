@@ -8,16 +8,16 @@ import promBundle from 'express-prom-bundle';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const metricsMiddleware = promBundle({
-    includeMethod: true, // Включает HTTP-метод (GET, POST и т.д.) в метрики
-    includePath: true, // Включает путь (роут) запроса,
+    includeMethod: true,
+    includePath: true,
     includeStatusCode: true,
     includeUp: true,
-    metricType: 'histogram', // Создает гистограммы для расчета p95/p99
+    metricType: 'histogram',
   });
   app.use(metricsMiddleware);
   app.enableCors({
-    origin: 'https://web-lab-b2je.vercel.app', // Замените на точный URL вашего фронтенда!
-    credentials: true, // Разрешает передачу кук и заголовков авторизации
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
   });
   app.useGlobalPipes(new ZodValidationPipe());
   app.useGlobalFilters(new GlobalExceptionFilter());
@@ -25,7 +25,7 @@ async function bootstrap() {
 }
 bootstrap()
   .then(() => {
-    console.log('Ok');
+    console.log(process.env.FRONTEND_URL);
   })
   .catch((err) => {
     console.error('Something went wrong', err);

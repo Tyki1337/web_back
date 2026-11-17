@@ -16,7 +16,7 @@ async function bootstrap() {
   });
   app.use(metricsMiddleware);
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: [process.env.FRONTEND_URL_PROD, process.env.FRONTEND_URL_LOCAL],
     credentials: true,
   });
   app.useGlobalPipes(new ZodValidationPipe());

@@ -25,7 +25,7 @@ async function bootstrap() {
 }
 bootstrap()
   .then(() => {
-    console.log(process.env.FRONTEND_URL);
+    console.log(process.env.FRONTEND_URL_LOCAL, process.env.FRONTEND_URL_PROD);
   })
   .catch((err) => {
     console.error('Something went wrong', err);
